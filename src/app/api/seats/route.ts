@@ -8,7 +8,7 @@ export async function POST(req: NextRequest) {
   try {
   const session = await getServerSession(authOptions);
 // Mode invité autorisé temporairement
-const userId = session?.user?.id || null;
+const userId = session?.user?.id || "guest-user";
     
 
     const { seatIds, eventId } = await req.json();

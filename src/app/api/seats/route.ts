@@ -6,9 +6,9 @@ import { prisma } from "@/lib/prisma";
 // Réserver temporairement des places (15 min)
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
+  const session = await getServerSession(authOptions);
+// Mode invité autorisé temporairement
+const userId = session?.user?.id || null;
     }
 
     const { seatIds, eventId } = await req.json();
@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
       const order = await tx.order.create({
         data: {
-          userId: session.user.id,
+          userId: userId,
           eventId,
           status: "PENDING",
           totalAmount,

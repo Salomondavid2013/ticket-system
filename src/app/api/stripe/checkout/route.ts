@@ -6,10 +6,8 @@ import { stripe } from "@/lib/stripe";
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: "Non authentifié" }, { status: 401 });
-    }
+   const session = await getServerSession(authOptions);
+const userId = session?.user?.id || "guest-user";
 
     const { orderId } = await req.json();
 
@@ -26,7 +24,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    if (!order || order.userId !== session.user.id) {
+   if (!order || order.userId !== userId) {
       return NextResponse.json({ error: "Commande introuvable" }, { status: 404 });
     }
 
